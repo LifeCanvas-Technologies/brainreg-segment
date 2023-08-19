@@ -1,4 +1,4 @@
-from bg_atlasapi.list_atlases import descriptors, utils
+from bg_atlasapi.list_atlases import descriptors, utils, get_downloaded_atlases, get_local_atlas_version
 
 
 def lateralise_atlas_image(
@@ -33,6 +33,13 @@ def get_available_atlases():
         descriptors.remote_url_base.format("last_versions.conf")
     )
     available_atlases = dict(available_atlases["atlases"])
+    
+    # Also get locally added atlases
+    local_atlases = get_downloaded_atlases()
+    for atlas in local_atlases:
+        if not available_atlases.has_key(atlas):
+            version = get_local_atlas_version(atlas)
+            available_atlases[atlas] = version 
     return available_atlases
 
 
